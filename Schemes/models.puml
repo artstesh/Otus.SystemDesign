@@ -1,0 +1,95 @@
+﻿@startuml
+!theme cerulean-outline
+<style>
+  document {
+    BackGroundColor #fff
+  }
+</style>
+!define table(x) class x << (T,#FFAAAA) >>
+!define key(x) <u>x</u>
+
+table(User) {
+  key(id) UUID
+  email string
+  password_hash string
+  name string
+  phone string
+  role enum
+  created_at timestamp
+}
+
+table(Ad) {
+  key(id) UUID
+  user_id UUID
+  title string
+  description text
+  price decimal
+  category_id int
+  region_id int
+  status enum
+  created_at timestamp
+  updated_at timestamp
+}
+
+table(Category) {
+  key(id) int
+  name string
+  parent_id int
+}
+
+table(Favorite) {
+  key(user_id) UUID
+  key(ad_id) UUID
+  added_at timestamp
+}
+
+table(Order) {
+  key(id) UUID
+  user_id UUID
+  ad_id UUID
+  status enum
+  total_amount decimal
+  delivery_address text
+  created_at timestamp
+}
+
+table(Payment) {
+  key(id) UUID
+  order_id UUID
+  amount decimal
+  status enum
+  external_id string
+  created_at timestamp
+}
+
+table(Delivery) {
+  key(id) UUID
+  order_id UUID
+  courier_id UUID
+  status enum
+  cost decimal
+  estimated_time interval
+  completed_at timestamp
+}
+
+table(Notification) {
+  key(id) UUID
+  user_id UUID
+  type enum
+  channel enum
+  content text
+  status enum
+  created_at timestamp
+}
+
+User ||--o{ Ad : "создаёт"
+User ||--o{ Order : "размещает"
+User ||--o{ Favorite : "имеет"
+Ad ||--o{ Favorite : "в избранном"
+Ad ||--o{ Order : "участвует в"
+Category ||--o{ Ad : "категория"
+Order ||--|| Payment : "один к одному"
+Order ||--|| Delivery : "один к одному"
+User ||--o{ Notification : "получает"
+User ||--o{ Delivery : "как курьер"
+@enduml
