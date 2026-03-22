@@ -441,7 +441,7 @@ _Польза: согласованность данных._
 
 ### 2.8. Схема архитектуры решения
 
-![kuber4.png](Images/kuber.png)
+![kuber.png](Images/kuber.png)
 
 ### 2.9 Observability
 
