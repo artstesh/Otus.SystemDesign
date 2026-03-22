@@ -7,7 +7,7 @@
 </style>
 node "Kubernetes Cluster" {
   frame "API Gateway" {
-    component "Gateway Service (Ocelot)" as gateway
+    component "Gateway Service" as gateway
   }
 
   frame "User Service" {
@@ -28,12 +28,10 @@ node "Kubernetes Cluster" {
 
   frame "Delivery Service" {
     component "Delivery Service Pod" as delivery_pod
-    component "Delivery Service Headless Service" as delivery_svc
   }
 
   frame "Notification Service" {
     component "Notification Service Pod" as notif_pod
-    component "Notification Service Headless Service" as notif_svc
   }
 
   frame "Search Service" {
@@ -41,7 +39,7 @@ node "Kubernetes Cluster" {
   }
 
   database "PostgreSQL Cluster" {
-    component "Master (Primary)" as pg_master
+    component "Master" as pg_master
     component "Replica 1" as pg_replica1
     component "Replica 2" as pg_replica2
     component "PgBouncer (connection pool)" as pgbouncer
@@ -72,7 +70,7 @@ gateway --> ad_pod
 gateway --> order_pod
 gateway --> payment_pod
 gateway --> delivery_pod
-gateway --> notif_svc
+gateway --> notif_pod
 gateway --> search_pod
 
 user_pod --> pgbouncer
