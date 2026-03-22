@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:archimate="http://www.archimatetool.com/archimate" name="Otus.SystemDesign" id="id-85e06dabbc1f45b586b4b0d93fb5560f" version="5.0.0">
+<archimate:model xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:archimate="http://www.archimatetool.com/archimate" name="Otus.SystemDesign4" id="id-85e06dabbc1f45b586b4b0d93fb5560f" version="5.0.0">
   <folder name="Strategy" id="id-0f9f9c3bac8d47009f8d8c921c65f339" type="strategy"/>
   <folder name="Business" id="id-68b86a4f891049b8a47b63177e5922bb" type="business">
     <element xsi:type="archimate:BusinessActor" name="Customer" id="id-39681971255840b7bc5c922dc412d9cf"/>
@@ -79,6 +79,7 @@
   <folder name="Implementation &amp; Migration" id="id-0bcf7ed34cfc43379abfceff18ada4cd" type="implementation_migration"/>
   <folder name="Other" id="id-71d1db60d12241f8b94dcd0683e2b2d4" type="other">
     <element xsi:type="archimate:Grouping" name="Inner Services" id="id-d7574150a8cc404f8c0f0b3da9c3f37b"/>
+    <element xsi:type="archimate:Grouping" name="Clients" id="id-412716e6be0f4f72b4e3e6c9eecc1c58"/>
   </folder>
   <folder name="Relations" id="id-83b3b59273214f4e87297ebc53b185b5" type="relations">
     <element xsi:type="archimate:ServingRelationship" id="id-205010695ad14d5c8f5f309546f17343" source="id-6b97fdc1f1374b49b591a9726ad92e51" target="id-e351ae6c37de4700bb692a15d5080c9c"/>
@@ -147,7 +148,6 @@
           <sourceConnection xsi:type="archimate:Connection" id="id-7278a31e263243318de1838422af9cd4" source="id-31850cd0dcdf434ab72f6303fbe9a744" target="id-3528ee8c0dc8446b979c2afa659e7045" archimateRelationship="id-52fd061c120b4436a4778709d2752fdd">
             <feature name="labelExpression" value="Cache"/>
           </sourceConnection>
-          <sourceConnection xsi:type="archimate:Connection" id="id-bc4c66b58ded45dcb1c3037644c4ced3" source="id-31850cd0dcdf434ab72f6303fbe9a744" target="id-64b203340f774d51bdb7c0722e47e900" archimateRelationship="id-846ebc4cea8d4a2489677ec366fb5b53"/>
         </child>
         <child xsi:type="archimate:DiagramObject" id="id-a2fbd4b210eb46b2a8d70e01e10d75af" targetConnections="id-6f72f5f84ba7473689f7fe7894b2c71a" archimateElement="id-f49573bc42f34801915ca1dfac133f23">
           <bounds x="456" y="60" width="120" height="55"/>
@@ -186,9 +186,6 @@
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-3528ee8c0dc8446b979c2afa659e7045" targetConnections="id-a9ba6fae2a50491caa8eb504bb26af35 id-7278a31e263243318de1838422af9cd4" archimateElement="id-26cb26c3789141f3ad1972334158d1cb">
         <bounds x="996" y="672" width="120" height="55"/>
-      </child>
-      <child xsi:type="archimate:DiagramObject" id="id-64b203340f774d51bdb7c0722e47e900" targetConnections="id-bc4c66b58ded45dcb1c3037644c4ced3" archimateElement="id-51b5b00e75ab452eb3163713f687843b">
-        <bounds x="1188" y="696" width="120" height="55"/>
       </child>
       <child xsi:type="archimate:DiagramObject" id="id-07825524e0e54fdfae1872186813b977" targetConnections="id-4e099843de334dd7b9dc166a0a3c0caa" archimateElement="id-7ecbbc6312e14db7a73dd053b3117442">
         <bounds x="144" y="270" width="120" height="55"/>

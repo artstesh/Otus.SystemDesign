@@ -1,82 +1,61 @@
-﻿@startuml
+﻿git@startuml
 !theme cerulean-outline
 <style>
   document {
     BackGroundColor #fff
   }
 </style>
-' === Внешний периметр ===
-node "Cloudflare / CDN" {
-  component "WAF" as waf
-  component "DDoS Protection" as ddos
-}
 
-node "Load Balancer" as lb
-
-' === Kubernetes Cluster ===
 node "Kubernetes Cluster" {
-  component "API Gateway (Ocelot)" as gateway
-  component "Service Discovery (CoreDNS)" as dns
-
-  frame "User Service" {
-    component "Pod" as user_pod
-  }
-  frame "Ad Service" {
-    component "Pod" as ad_pod
-  }
-  frame "Order Service" {
-    component "Pod" as order_pod
-  }
-  frame "Payment Service" {
-    component "Pod" as payment_pod
-  }
-  frame "Delivery Service" {
-    component "Pod" as delivery_pod
-  }
-  frame "Notification Service" {
-    component "Pod" as notif_pod
-  }
-  frame "Search Service" {
-    component "Pod" as search_pod
+  frame "Application Services" {
+    component "Ad Service" as ad
+    component "Search Service" as search
+    component "User Service" as user
+    component "Order Service" as order
+    component "Payment Service" as payment
   }
 
-  database "Kafka" {
-    component "Broker" as kafka
+  frame "Data Layer" {
+    database "PostgreSQL Cluster" {
+      component "Master" as pg_master
+      component "Replica 1" as pg_replica1
+      component "Replica 2" as pg_replica2
+      component "PgBouncer" as pgbouncer
+    }
+
+    database "Elasticsearch Cluster" {
+      component "Master Nodes" as es_master
+      component "Data Nodes" as es_data
+    }
+
+    database "Redis Cluster" {
+      component "Redis" as redis_master
+    }
+
+    database "Kafka Cluster" as kafka
+
+    component "S3 Storage" as s3
+    component "CDN" as cdn
   }
 }
 
-node "External Services" {
-  component "Payment Gateway" as pay_ext
-  component "Maps API" as map_ext
+node "External" {
+  component "Payment Gateway" as payext
+  component "Maps API" as mapext
 }
 
-' === Связи ===
-Internet --> waf
-waf --> lb
-lb --> gateway
-
-gateway --> dns
-gateway --> user_pod
-gateway --> ad_pod
-gateway --> order_pod
-gateway --> payment_pod
-gateway --> delivery_pod
-gateway --> notif_pod
-gateway --> search_pod
-
-user_pod --> ad_pod : gRPC
-order_pod --> payment_pod : gRPC
-order_pod --> delivery_pod : gRPC
-
-ad_pod --> kafka : Kafka (pub)
-order_pod --> kafka : Kafka (pub)
-payment_pod --> kafka : Kafka (pub)
-delivery_pod --> kafka : Kafka (pub)
-kafka --> notif_pod : sub
-kafka --> search_pod : sub
-
-payment_pod --> pay_ext : REST
-delivery_pod --> map_ext : REST
-
-notif_pod --> Internet : WebSockets
+' Взаимодействия
+ad --> pgbouncer : команды
+ad --> redis_master : кэш
+ad --> s3 : upload
+ad --> kafka : события
+search --> es_data : индексация
+search <-- kafka : подписка
+user --> pgbouncer
+order --> pgbouncer
+payment --> pgbouncer
+payment --> payext
+search --> redis_master : кэш результатов
+cdn <-- s3 : origin
+cdn --> Internet : клиенты
 @enduml
