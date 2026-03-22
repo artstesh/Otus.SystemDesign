@@ -1,0 +1,52 @@
+﻿@startuml
+!theme cerulean-outline
+<style>
+  document {
+    BackGroundColor #fff
+  }
+</style>
+
+actor "Developer" as dev
+actor "CI/CD System" as cicd
+
+node "Git Repository" as git {
+  component "Infrastructure Code (Terraform)" as tf
+  component "Config Management (Ansible)" as ansible
+  component "App Code + Dockerfiles" as app
+  component "K8s Manifests" as k8s
+}
+
+node "Terraform Cloud" as tf_runner {
+  component "Terraform" as tf_apply
+}
+
+node "Kubernetes Cluster" as k8s_cluster {
+  component "Ingress Controller" as ingress
+  component "Pods" as services
+  database "PostgreSQL" as pg
+  database "Redis" as redis
+  database "Kafka" as kafka
+}
+
+node "External" {
+  component "Docker Registry" as registry
+  component "S3 Storage" as s3
+  component "CDN" as cdn
+}
+
+dev --> git : push
+cicd --> git : trigger
+tf_runner --> tf : apply
+tf_apply --> k8s_cluster
+tf_apply --> pg
+tf_apply --> redis
+tf_apply --> kafka
+ansible --> k8s_cluster : configure
+app --> registry : build & push
+k8s --> k8s_cluster : kubectl apply
+services --> pg : connect
+services --> redis : connect
+services --> kafka : connect
+services --> s3 : connect
+s3 --> cdn
+@enduml
