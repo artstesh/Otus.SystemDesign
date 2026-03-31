@@ -23,7 +23,13 @@ node "Terraform Cloud" as tf_runner {
 node "Kubernetes Cluster" as k8s_cluster {
   component "Ingress Controller" as ingress
   component "Pods" as services
-  database "PostgreSQL" as pg
+  database "PostgreSQL" as pg {
+   database "User DB (PostgreSQL)" as pg_user
+   database "Ad DB (PostgreSQL)" as pg_ad
+   database "Order DB (PostgreSQL)" as pg_order
+   database "Payment DB (PostgreSQL)" as pg_payment
+   database "Delivery DB (PostgreSQL)" as pg_delivery
+  }
   database "Redis" as redis
   database "Kafka" as kafka
 }
