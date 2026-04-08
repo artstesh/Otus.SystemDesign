@@ -15,7 +15,9 @@ node "Load Balancer" as lb
 
 ' === Kubernetes Cluster ===
 node "Kubernetes Cluster" {
-  component "API Gateway (Ocelot)" as gateway
+  frame "API Gateway" {
+    component "Gateway Service" as gateway
+  }
   component "Service Discovery (CoreDNS)" as dns
 
   frame "User Service" {
