@@ -1,0 +1,17 @@
+@startuml
+!theme cerulean-outline
+<style>
+  document {
+    BackGroundColor #fff
+  }
+</style>
+participant "Order Service" as orchestrator
+participant "Payment Service" as payment
+participant "Delivery Service" as delivery
+
+orchestrator -> payment : reserve payment
+payment --> orchestrator : OK
+orchestrator -> delivery : schedule delivery
+delivery --> orchestrator : OK
+orchestrator -> orchestrator : update order status = confirmed
+@enduml
