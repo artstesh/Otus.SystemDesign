@@ -1,0 +1,21 @@
+@startuml
+!theme cerulean-outline
+<style>
+  document {
+    BackGroundColor #fff
+  }
+</style>
+actor "Orchestrator" as orchestrator
+participant "Order Service" as order
+participant "Payment Service" as payment
+participant "Delivery Service" as delivery
+
+orchestrator -> order : order in pending status
+order --> orchestrator : OK
+orchestrator -> payment : reserve payment
+payment --> orchestrator : OK
+orchestrator -> delivery : schedule delivery
+delivery --> orchestrator : OK
+orchestrator -> order : update order status = confirmed
+order --> orchestrator : OK
+@enduml

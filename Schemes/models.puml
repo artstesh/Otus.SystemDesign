@@ -14,8 +14,17 @@ table(User) {
   password_hash string
   name string
   phone string
-  role enum
   created_at timestamp
+}
+
+table(Roles) {
+  key(id) UUID
+  name varchar(50)
+}
+
+table(UserRoles) {
+  key(user_id) UUID
+  key(role_id) UUID
 }
 
 table(Ad) {
@@ -92,4 +101,6 @@ Order ||--|| Payment : "один к одному"
 Order ||--|| Delivery : "один к одному"
 User ||--o{ Notification : "получает"
 User ||--o{ Delivery : "как курьер"
+User ||--o{ UserRoles
+Roles ||--o{ UserRoles
 @enduml
