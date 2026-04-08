@@ -208,9 +208,6 @@
         <bounds x="685" y="672" width="252" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-f3a86bab02d24d8a93590fa3988e696d" source="id-4ca7c1ef67e04aae995a217ff34165d9" target="id-4fa62071a8b144eb8e3de0178a06c999" archimateRelationship="id-492377f8f091432c9de13f2c789a4ef2"/>
       </child>
-      <child xsi:type="archimate:DiagramObject" id="id-7f10d6b6804c433e94860e52cdb441ea" targetConnections="id-d9a76c091df24696837665dcbc6949b7" archimateElement="id-ff57325a72bd49ecb4d642c4a8f1a12b">
-        <bounds x="817" y="-168" width="120" height="55"/>
-      </child>
       <child xsi:type="archimate:DiagramObject" id="id-7da1c8873a8c4ee0a51678110dc55cb3" targetConnections="id-5a513c07016c474a8bdee21dd952c81c" archimateElement="id-6b97fdc1f1374b49b591a9726ad92e51">
         <bounds x="445" y="-60" width="409" height="55"/>
         <sourceConnection xsi:type="archimate:Connection" id="id-b7784a44d45b49c082177ce7f138df32" source="id-7da1c8873a8c4ee0a51678110dc55cb3" target="id-be319fef78ec404188275402a6f4b470" archimateRelationship="id-d46081f7d5e04491ac3408de85afbe28">
