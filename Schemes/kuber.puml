@@ -1,0 +1,98 @@
+﻿@startuml
+!theme cerulean-outline
+<style>
+  document {
+    BackGroundColor #fff
+  }
+</style>
+node "Kubernetes Cluster" {
+  frame "API Gateway" {
+    component "Gateway Service" as gateway
+  }
+
+  frame "User Service" {
+    component "User Service Pod" as user_pod
+  }
+
+  frame "Ad Service" {
+    component "Ad Service Pod" as ad_pod
+  }
+
+  frame "Order Service" {
+    component "Order Service Pod" as order_pod
+  }
+
+  frame "Payment Service" {
+    component "Payment Service Pod" as payment_pod
+  }
+
+  frame "Delivery Service" {
+    component "Delivery Service Pod" as delivery_pod
+  }
+
+  frame "Notification Service" {
+    component "Notification Service Pod" as notif_pod
+  }
+
+  frame "Search Service" {
+    component "Search Service Pod" as search_pod
+  }
+
+  database "PostgreSQL Cluster" {
+    component "Master" as pg_master
+    component "Replica 1" as pg_replica1
+    component "Replica 2" as pg_replica2
+    component "PgBouncer (connection pool)" as pgbouncer
+  }
+
+  database "Elasticsearch Cluster" {
+    component "Master Nodes" as es_master
+    component "Data Nodes" as es_data
+  }
+
+  database "Redis Cluster" {
+    component "Redis" as redis_master
+  }
+
+    database "Kafka Cluster" as kafka
+
+  component "Object Storage (S3)" as s3
+  component "CDN" as cdn
+}
+
+node "External Services" {
+  component "Payment Gateway" as payext
+  component "Maps API" as mapext
+}
+
+gateway --> user_pod
+gateway --> ad_pod
+gateway --> order_pod
+gateway --> payment_pod
+gateway --> delivery_pod
+gateway --> notif_pod
+gateway --> search_pod
+
+user_pod --> pgbouncer
+ad_pod --> pgbouncer
+order_pod --> pgbouncer
+payment_pod --> pgbouncer
+delivery_pod --> pgbouncer
+ad_pod --> redis_master
+user_pod --> redis_master
+search_pod --> es_data
+
+order_pod --> kafka
+payment_pod --> kafka
+delivery_pod --> kafka
+notif_pod <-- kafka
+search_pod <-- kafka
+
+ad_pod --> s3
+s3 --> cdn
+cdn --> gateway
+
+payment_pod --> payext
+delivery_pod --> mapext
+
+@enduml
