@@ -1,0 +1,35 @@
+﻿@startuml
+!theme cerulean-outline
+<style>
+  document {
+    BackGroundColor #fff
+  }
+</style>
+actor "Покупатель" as user
+participant "API Gateway" as gateway
+participant "Order Service" as order
+participant "Kafka" as kafka
+participant "Payment Service" as payment
+participant "Delivery Service" as delivery
+participant "Notification Service" as notif
+participant "Платёжный шлюз" as pay_ext
+participant "Картографический API" as map_ext
+
+user -> gateway: POST /orders
+gateway -> order: CreateOrder
+order -> kafka: OrderCreated
+kafka -> payment: consume
+payment -> pay_ext: REST /charge
+pay_ext --> payment: success
+payment -> kafka: PaymentProcessed
+kafka -> delivery: consume
+delivery -> map_ext: GET /distance
+map_ext --> delivery: distance
+delivery -> kafka: DeliveryScheduled
+kafka -> order: consume (aggregate)
+order -> gateway: response
+gateway --> user: 200 OK (асинхронно)
+
+kafka -> notif: consume
+notif -> user: WebSocket / notification
+@enduml

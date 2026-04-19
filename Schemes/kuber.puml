@@ -5,66 +5,59 @@
     BackGroundColor #fff
   }
 </style>
+' === Внешний периметр ===
+node "Cloudflare / CDN" {
+  component "WAF" as waf
+  component "DDoS Protection" as ddos
+}
+
+node "Load Balancer" as lb
+
+' === Kubernetes Cluster ===
 node "Kubernetes Cluster" {
   frame "API Gateway" {
     component "Gateway Service" as gateway
   }
+  component "Service Discovery (CoreDNS)" as dns
 
   frame "User Service" {
-    component "User Service Pod" as user_pod
+    component "Pod" as user_pod
   }
-
   frame "Ad Service" {
-    component "Ad Service Pod" as ad_pod
+    component "Pod" as ad_pod
   }
-
   frame "Order Service" {
-    component "Order Service Pod" as order_pod
+    component "Pod" as order_pod
   }
-
   frame "Payment Service" {
-    component "Payment Service Pod" as payment_pod
+    component "Pod" as payment_pod
   }
-
   frame "Delivery Service" {
-    component "Delivery Service Pod" as delivery_pod
+    component "Pod" as delivery_pod
   }
-
   frame "Notification Service" {
-    component "Notification Service Pod" as notif_pod
+    component "Pod" as notif_pod
   }
-
   frame "Search Service" {
-    component "Search Service Pod" as search_pod
+    component "Pod" as search_pod
   }
 
-  database "PostgreSQL Cluster" {
-    component "Master" as pg_master
-    component "Replica 1" as pg_replica1
-    component "Replica 2" as pg_replica2
-    component "PgBouncer (connection pool)" as pgbouncer
+  database "Kafka" {
+    component "Broker" as kafka
   }
-
-  database "Elasticsearch Cluster" {
-    component "Master Nodes" as es_master
-    component "Data Nodes" as es_data
-  }
-
-  database "Redis Cluster" {
-    component "Redis" as redis_master
-  }
-
-    database "Kafka Cluster" as kafka
-
-  component "Object Storage (S3)" as s3
-  component "CDN" as cdn
 }
 
 node "External Services" {
-  component "Payment Gateway" as payext
-  component "Maps API" as mapext
+  component "Payment Gateway" as pay_ext
+  component "Maps API" as map_ext
 }
 
+' === Связи ===
+Internet --> waf
+waf --> lb
+lb --> gateway
+
+gateway --> dns
 gateway --> user_pod
 gateway --> ad_pod
 gateway --> order_pod
@@ -73,26 +66,19 @@ gateway --> delivery_pod
 gateway --> notif_pod
 gateway --> search_pod
 
-user_pod --> pgbouncer
-ad_pod --> pgbouncer
-order_pod --> pgbouncer
-payment_pod --> pgbouncer
-delivery_pod --> pgbouncer
-ad_pod --> redis_master
-user_pod --> redis_master
-search_pod --> es_data
+user_pod --> ad_pod : gRPC
+order_pod --> payment_pod : gRPC
+order_pod --> delivery_pod : gRPC
 
-order_pod --> kafka
-payment_pod --> kafka
-delivery_pod --> kafka
-notif_pod <-- kafka
-search_pod <-- kafka
+ad_pod --> kafka : Kafka (pub)
+order_pod --> kafka : Kafka (pub)
+payment_pod --> kafka : Kafka (pub)
+delivery_pod --> kafka : Kafka (pub)
+kafka --> notif_pod : sub
+kafka --> search_pod : sub
 
-ad_pod --> s3
-s3 --> cdn
-cdn --> gateway
+payment_pod --> pay_ext : REST
+delivery_pod --> map_ext : REST
 
-payment_pod --> payext
-delivery_pod --> mapext
-
+notif_pod --> Internet : WebSockets
 @enduml
